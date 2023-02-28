@@ -37,14 +37,16 @@ void print(int x1, int y1, int z1, int x2, int y2, int z2) {
 }
 
 void setup() {
+  Serial.begin(9600);  // set the baud rate to 
+  
   mechanicalArm.setup();
-  Serial.begin(9600);  // set the baud rate to 9600
 }
 
 void loop() {
-  PRINT_DEBUG("*** test test ***")
+  // PRINT_DEBUG("*** test test ***")
   mechanicalArm.run();
-  delay(5);
+  delay(20);
+
   // print(x1, y1, z1, x2, y2, z2);
 
   //delay(5)  ;// delay, used to reduce the joystick value read, that is reduce the whole speed.
