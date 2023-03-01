@@ -5,24 +5,21 @@
 #include <Servo.h>
 #include "joystick.hpp"
 
-struct MovmentDefinition 
+struct MovmentDefinition
 {
-  const uint8_t min_range; 
+  const uint8_t min_range;
   const uint8_t max_range;
   const uint8_t start_position;
 
-  MovmentDefinition(const uint8_t min_range, const uint8_t max_range, const uint8_t start_position) : min_range(min_range), max_range(max_range), start_position(start_position) 
+  MovmentDefinition(const uint8_t min_range, const uint8_t max_range, const uint8_t start_position) : min_range(min_range), max_range(max_range), start_position(start_position)
   {
   }
 };
 
-class ServoWithJoystick {
+class ServoWithJoystick
+{
 private:
-  bool (*is_down) (Joystick& joystick);
-  bool (*is_up) (Joystick& joystick);
-
   const MovmentDefinition movment_definition;
-  Joystick& joystick;
 
   const uint8_t servo_pin;
 
@@ -30,23 +27,68 @@ private:
 
   uint8_t servo_position;
 
+  static const uint8_t movment_step = 2;
+
+protected:
+  Joystick &joystick;
+
 public:
-  ServoWithJoystick(bool (*is_down) (Joystick& joystick), bool (*is_up) (Joystick& joystick), MovmentDefinition movment_definition, Joystick& joystick, const uint8_t servo_pin);
+  ServoWithJoystick(MovmentDefinition movment_definition, const uint8_t servo_pin, Joystick &joystick);
 
   void setup();
 
   void run();
+
+private:
+  virtual bool is_joystick_down() = 0;
+
+  virtual bool is_joystick_up() = 0;
 };
 
-class MechanicalArm {
+class ServoWithJoystickDownUp : public ServoWithJoystick
+{
+public:
+  using ServoWithJoystick::ServoWithJoystick;
+
+private:
+  virtual bool is_joystick_down()
+  {
+    return joystick.isDown();
+  }
+
+  virtual bool is_joystick_up()
+  {
+    return joystick.isUp();
+  }
+};
+
+class ServoWithJoystickLeftRight : public ServoWithJoystick
+{
+public:
+  using ServoWithJoystick::ServoWithJoystick;
+
+private:
+  virtual bool is_joystick_down()
+  {
+    return joystick.isLeft();
+  }
+
+  virtual bool is_joystick_up()
+  {
+    return joystick.isRight();
+  }
+};
+
+class MechanicalArm
+{
 private:
   Joystick rightJoystick;
   Joystick leftJoystick;
 
-  ServoWithJoystick baseplate;
-  ServoWithJoystick clampClaw;
-  ServoWithJoystick lowerArm;
-  ServoWithJoystick upperArm;
+  ServoWithJoystickLeftRight baseplate;
+  ServoWithJoystickLeftRight clampClaw;
+  ServoWithJoystickDownUp lowerArm;
+  ServoWithJoystickDownUp upperArm;
 
 public:
   MechanicalArm();

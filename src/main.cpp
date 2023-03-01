@@ -18,24 +18,6 @@ int jiyi4[20];
 int i = 0;  // for loop
 int j = 0;  //  save the last value of i
 
-void print(int x, int y, int z) {
-  Serial.print(x);
-  Serial.print("\t");
-
-  Serial.print(y);
-  Serial.print("\t");
-
-  Serial.print(z);
-  Serial.print("\t");
-}
-
-void print(int x1, int y1, int z1, int x2, int y2, int z2) {
-  print(x1, y1, z1);
-  print(x2, y2, z2);
-
-  Serial.println();
-}
-
 void setup() {
   Serial.begin(9600);  // set the baud rate to 
   
