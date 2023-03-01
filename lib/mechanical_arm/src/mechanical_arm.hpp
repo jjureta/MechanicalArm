@@ -2,7 +2,6 @@
 #define mechanical_arm_hpp
 
 #include <Arduino.h>
-#include <pins_arduino.h>
 #include <Servo.h>
 #include "joystick.hpp"
 
@@ -41,18 +40,13 @@ public:
 
 class MechanicalArm {
 private:
-  // define the variable of 4 servo angle and assign the initial value( that is the boot posture angle value)
-  int baseplatePosition = 90, upperArmPosition = 90, lowerArmPosition = 90, pos4 = 40;
-
   Joystick rightJoystick;
   Joystick leftJoystick;
 
-  ServoWithJoystick leftArm;
-
-  Servo baseplateServo;
-  Servo rightSideServo;
-  // Servo leftSideServo;
-  Servo clampClawServo;
+  ServoWithJoystick baseplate;
+  ServoWithJoystick clampClaw;
+  ServoWithJoystick lowerArm;
+  ServoWithJoystick upperArm;
 
 public:
   MechanicalArm();
@@ -60,21 +54,6 @@ public:
   void setup();
 
   void run();
-
-private:
-  //claw
-  void clampClaw(const Joystick& joystick);
-  //******************************************************
-  //turn
-  void baseplate(const Joystick& joystick);
-
-  //**********************************************************/
-  // upper arm
-  void upperArm(const Joystick& joystick);
-
-  //*************************************************************/
-  // lower arm
-  // void lowerArm(const Joystick& joystick);
 };
 
 #endif
